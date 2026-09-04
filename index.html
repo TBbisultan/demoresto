@@ -82,7 +82,22 @@
   .lang-pill{
     display:flex;align-items:center;gap:4px;background:rgba(13,5,7,.65);backdrop-filter:blur(6px);
     border:1px solid var(--line-strong);padding:7px 12px;border-radius:999px;font-size:12px;letter-spacing:.03em;color:var(--text-dim);
+    position:relative;cursor:pointer;user-select:none;
   }
+  .lang-menu{
+    position:absolute;top:calc(100% + 8px);right:0;background:var(--card);border:1px solid var(--line-strong);
+    border-radius:12px;overflow:hidden;min-width:150px;display:none;z-index:50;box-shadow:0 14px 32px rgba(0,0,0,.55);
+  }
+  .lang-menu.show{display:block;}
+  .lang-menu button{
+    display:flex;align-items:center;justify-content:space-between;width:100%;text-align:left;
+    padding:11px 14px;font-size:13px;color:var(--text-dim);white-space:nowrap;
+  }
+  .lang-menu button .code{font-weight:800;font-size:12.5px;}
+  .lang-menu button .name{color:var(--text-faint);font-size:12px;margin-left:8px;}
+  .lang-menu button.active{background:linear-gradient(135deg,var(--wine-2),var(--wine));color:#fff;}
+  .lang-menu button.active .name{color:rgba(255,255,255,.75);}
+  .lang-menu button:not(.active):hover{background:var(--card-2);}
   .hero-glow{
     position:absolute;bottom:-40px;left:50%;transform:translateX(-50%);width:340px;height:200px;
     background:radial-gradient(ellipse at center, rgba(156,28,63,.35), transparent 70%);
@@ -136,6 +151,11 @@
   .social-btn{display:flex;align-items:center;gap:8px;background:var(--card-2);border:1px solid var(--line-strong);border-radius:999px;padding:10px 16px;font-size:13.5px;font-weight:600;color:var(--text-dim);}
   .social-btn svg{width:16px;height:16px;}
 
+  .site-footer{
+    text-align:center;padding:26px 10px 6px;font-size:11.5px;letter-spacing:.08em;
+    color:var(--text-faint);text-transform:uppercase;
+  }
+
   /* ================= MENU ================= */
   .topbar{
     position:sticky;top:0;z-index:20;background:rgba(13,5,7,.85);backdrop-filter:blur(14px);
@@ -151,6 +171,18 @@
   .search-wrap input{flex:1;background:none;border:none;outline:none;color:var(--text);font-size:16px;font-family:inherit;min-width:0;}
   .search-wrap input::placeholder{color:var(--text-faint);}
   .cat-scroll{display:flex;gap:10px;overflow-x:auto;padding-bottom:2px;-webkit-overflow-scrolling:touch;}
+
+  /* ---- promo banners (реклама) ---- */
+  .promo-scroll{display:flex;gap:10px;overflow-x:auto;padding-bottom:2px;margin-bottom:12px;-webkit-overflow-scrolling:touch;}
+  .promo-card{
+    flex-shrink:0;width:172px;height:100px;border-radius:16px;overflow:hidden;position:relative;
+    background:linear-gradient(135deg,#2c0e17,#120306);border:1px solid var(--line-strong);
+    background-size:cover;background-position:center;
+  }
+  .promo-card.empty::after{
+    content:"";position:absolute;inset:0;
+    background:repeating-linear-gradient(135deg, rgba(255,255,255,.035) 0 8px, transparent 8px 16px);
+  }
   .cat-card{
     flex-shrink:0;width:112px;border-radius:14px;overflow:hidden;background:var(--card);
     border:1px solid var(--line-strong);cursor:pointer;position:relative;transition:.2s;
@@ -165,14 +197,8 @@
     content:"";position:absolute;inset:0;
     background:repeating-linear-gradient(135deg, rgba(255,255,255,.03) 0 8px, transparent 8px 16px);
   }
-  .cat-edit-btn{
-    position:absolute;bottom:5px;right:5px;width:22px;height:22px;border-radius:50%;
-    background:rgba(13,5,7,.75);border:1px solid rgba(255,255,255,.25);backdrop-filter:blur(3px);
-    display:flex;align-items:center;justify-content:center;color:#fff;z-index:3;
-  }
   .cat-card-label{padding:8px 10px;font-size:12px;font-weight:700;line-height:1.3;background:var(--card-2);color:var(--text-dim);}
   .cat-card.active .cat-card-label{background:linear-gradient(135deg,var(--wine-2),var(--wine));color:#fff;}
-  .cat-card input[type="file"]{display:none;}
 
   .menu-body{padding:18px 20px 130px;}
   .section-label{font-size:12.5px;letter-spacing:.04em;color:var(--text-faint);margin:18px 2px 12px;font-weight:600;}
@@ -182,18 +208,12 @@
     display:flex;gap:14px;background:var(--card);border:1px solid var(--line);border-radius:16px;
     padding:14px;margin-bottom:12px;position:relative;
   }
- .dish-img{
-  width:84px;
-  height:84px;
-  border-radius:12px;
-  flex-shrink:0;
-  position:relative;
-  overflow:hidden;
-  background-size:cover;
-  background-position:center;
-  background-repeat:no-repeat;
-  background-color:#241016;
-}
+  .dish-img{
+    width:84px;height:84px;border-radius:12px;flex-shrink:0;position:relative;overflow:hidden;
+    display:flex;align-items:center;justify-content:center;font-size:26px;
+    background-size:cover;background-position:center;
+  }
+  .dish-img.has-img{font-size:0;}
   .dish-img .star{
     position:absolute;top:5px;right:5px;width:20px;height:20px;border-radius:50%;background:#fff;
     display:flex;align-items:center;justify-content:center;color:var(--wine-2);font-size:11px;
@@ -241,18 +261,8 @@
 
   .order-body{padding:16px 20px 200px;}
   .order-item{display:flex;gap:14px;padding:16px 0;border-bottom:1px solid var(--line);}
-  .order-item-img{
-  width:84px;
-  height:84px;
-  min-width:84px;
-  border-radius:12px;
-  overflow:hidden;
-  flex-shrink:0;
-  background-size:cover;
-  background-position:center;
-  background-repeat:no-repeat;
-  background-color:#241016;
-}
+  .order-item-img{width:64px;height:64px;border-radius:12px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:22px;background-size:cover;background-position:center;}
+  .order-item-img.has-img{font-size:0;}
   .order-item-info{flex:1;display:flex;flex-direction:column;justify-content:center;gap:6px;}
   .order-item-name{font-weight:700;font-size:14.5px;}
   .order-item-meta{font-size:12px;color:var(--text-faint);}
@@ -275,7 +285,8 @@
   .addon-card{
     flex-shrink:0;width:140px;background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;
   }
-  .addon-img{height:100px;display:flex;align-items:center;justify-content:center;font-size:26px;}
+  .addon-img{height:100px;display:flex;align-items:center;justify-content:center;font-size:26px;background-size:cover;background-position:center;}
+  .addon-img.has-img{font-size:0;}
   .addon-info{padding:10px 11px 12px;}
   .addon-name{font-size:12.5px;font-weight:700;margin-bottom:6px;line-height:1.35;}
   .addon-bottom{display:flex;align-items:center;justify-content:space-between;}
@@ -397,8 +408,14 @@
       <div class="hero-glow"></div>
       <div class="hero-top">
         <div class="logo-badge">M</div>
-        <div class="lang-pill">RU
+        <div class="lang-pill" id="langPill" onclick="toggleLangMenu(event)">
+          <span id="langCode">RU</span>
           <svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <div class="lang-menu" id="langMenu">
+            <button data-lang="ru" onclick="event.stopPropagation();applyLanguage('ru')"><span class="code">RU</span><span class="name">Русский</span></button>
+            <button data-lang="kz" onclick="event.stopPropagation();applyLanguage('kz')"><span class="code">KZ</span><span class="name">Қазақша</span></button>
+            <button data-lang="en" onclick="event.stopPropagation();applyLanguage('en')"><span class="code">EN</span><span class="name">English</span></button>
+          </div>
         </div>
       </div>
     </div>
@@ -409,14 +426,16 @@
         <div class="info-btn">i</div>
       </div>
 
-      <div class="desc">
+      <div class="desc" id="descBlock">
         Добро пожаловать, дорогой гость!<br>
         Авторская кухня и бордовая карта вин 🍷
         <span class="wifi-block">
           <b>Wi-Fi</b><br>
           Сеть: Merlot_Guest<br>
           Пароль: MerlotVIP<br>
-      
+          <b>Летняя терраса</b><br>
+          Сеть: Merlot_Leto<br>
+          Пароль: Leto12345
         </span>
       </div>
 
@@ -424,7 +443,7 @@
         <span class="ic">
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M4 19h16M6 15h12M8 11h8M10 7h4" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
         </span>
-        <span class="label">Смотреть меню</span>
+        <span class="label" id="menuCtaLabel">Смотреть меню</span>
         <span class="arrow">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </span>
@@ -434,7 +453,7 @@
         <span class="ic">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
         </span>
-        <span class="label">Как добраться — 2GIS</span>
+        <span class="label" id="gisLabel">Как добраться — 2GIS</span>
         <span class="arrow">
           <svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </span>
@@ -444,7 +463,7 @@
         <span class="ic">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
         </span>
-        <span class="label">Оставить отзыв</span>
+        <span class="label" id="reviewLabel">Оставить отзыв</span>
         <span class="arrow">
           <svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </span>
@@ -456,7 +475,7 @@
             <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M12 21s7-6.3 7-12a7 7 0 1 0-14 0c0 5.7 7 12 7 12z" stroke="#fff" stroke-width="2"/><circle cx="12" cy="9" r="2.4" stroke="#fff" stroke-width="2"/></svg>
           </span>
           <div>
-            <div class="info-title">Адрес заведения</div>
+            <div class="info-title" id="addressTitle">Адрес заведения</div>
             <div class="info-sub">Калдаякова 3, Блок С2</div>
           </div>
         </div>
@@ -465,8 +484,8 @@
             <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#fff" stroke-width="2"/><path d="M12 7v5l3.5 2" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
           </span>
           <div>
-            <div class="info-title">Режим работы</div>
-            <div class="info-sub">Вс–Чт 12:00–00:00<br>Пт–Сб 12:00–02:00</div>
+            <div class="info-title" id="hoursTitle">Режим работы</div>
+            <div class="info-sub" id="hoursSub">Вс–Чт 12:00–00:00<br>Пт–Сб 12:00–02:00</div>
           </div>
         </div>
         <div class="info-row">
@@ -474,7 +493,7 @@
             <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M4 5h4l2 5-2.5 1.5a11 11 0 0 0 5 5L14 14l5 2v4a2 2 0 0 1-2 2C9.6 22 2 14.4 2 7a2 2 0 0 1 2-2z" stroke="#fff" stroke-width="1.8" stroke-linejoin="round"/></svg>
           </span>
           <div>
-            <div class="info-title">Контакты</div>
+            <div class="info-title" id="contactsTitle">Контакты</div>
             <div class="info-sub">+7 700 999 06 06</div>
           </div>
         </div>
@@ -489,7 +508,7 @@
           </a>
         </div>
       </div>
-      <div style="height:20px"></div>
+      <div class="site-footer">by openvisual</div>
     </div>
   </section>
 
@@ -505,6 +524,7 @@
           <input id="searchInput" type="text" placeholder="Поиск" oninput="renderMenu()">
         </div>
       </div>
+      <div class="promo-scroll" id="promoScroll"></div>
       <div class="cat-scroll" id="catScroll"></div>
     </div>
     <div class="menu-body" id="menuBody"></div>
@@ -516,7 +536,7 @@
       <button class="back-btn" onclick="goTo('menu')">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
-      <h2>Ваш заказ</h2>
+      <h2 id="orderTitle">Ваш заказ</h2>
     </div>
     <div class="order-body" id="orderBody"></div>
   </section>
@@ -527,7 +547,7 @@
       <button class="back-btn" onclick="goTo('order')">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
-      <h2>Чек для официанта</h2>
+      <h2 id="receiptTitle">Чек для официанта</h2>
     </div>
     <div class="order-body" id="receiptBody"></div>
   </section>
@@ -535,60 +555,211 @@
   <div class="cart-bar" id="cartBar">
     <div class="cart-bar-inner" onclick="goTo('order')">
       <span class="cart-count" id="cartCount">0</span>
-      <span class="cart-label">Ваш заказ</span>
+      <span class="cart-label" id="cartLabelText">Ваш заказ</span>
       <span class="cart-total" id="cartTotal">0 ₸</span>
     </div>
   </div>
 
   <div class="waiter-bar" id="waiterBar" style="display:none;">
-    <button class="waiter-btn" onclick="showReceipt()">Показать официанту</button>
+    <button class="waiter-btn" id="waiterBtnText" onclick="showReceipt()">Показать официанту</button>
   </div>
 
   <div class="toast" id="toast"></div>
 </div>
 
 <script>
-/* ---------------- DATA ---------------- */
+/* ---------------- I18N ---------------- */
+const T = {
+  ru: {
+    welcome1:'Добро пожаловать, дорогой гость!', welcome2:'Авторская кухня и бордовая карта вин 🍷',
+    network:'Сеть', password:'Пароль', terrace:'Летняя терраса',
+    viewMenu:'Смотреть меню', howToGet:'Как добраться — 2GIS', leaveReview:'Оставить отзыв',
+    address:'Адрес заведения', hours:'Режим работы', contacts:'Контакты',
+    hoursLine1:'Вс–Чт 12:00–00:00', hoursLine2:'Пт–Сб 12:00–02:00',
+    search:'Поиск', yourOrder:'Ваш заказ', receiptTitle:'Чек для официанта', showToWaiter:'Показать официанту',
+    subtotal:'Итого', total:'Полная стоимость', totalItems:'Итого позиций', addToOrder:'Добавить к заказу?',
+    showScreen:'Покажите этот экран официанту', waiterComing:'Официант подойдёт к вам для подтверждения заказа',
+    emptyOrder:'Ваш заказ пуст.', goToMenu:'Перейти в меню', emptyOrderShort:'Заказ пуст.',
+    nothingFound:'Ничего не найдено', searchResults:'Результаты поиска',
+    addedToOrder:'Добавлено к заказу', photoUpdated:'Фото для «%s» обновлено', uploadPhoto:'Загрузить фото',
+  },
+  kz: {
+    welcome1:'Қош келдіңіз, қымбатты қонақ!', welcome2:'Авторлық асхана және бордо шарап картасы 🍷',
+    network:'Желі', password:'Құпия сөз', terrace:'Жазғы терраса',
+    viewMenu:'Мәзірді қарау', howToGet:'Қалай жетуге болады — 2GIS', leaveReview:'Пікір қалдыру',
+    address:'Мекен-жайы', hours:'Жұмыс уақыты', contacts:'Байланыс',
+    hoursLine1:'Жс–Бс 12:00–00:00', hoursLine2:'Жм–Сб 12:00–02:00',
+    search:'Іздеу', yourOrder:'Сіздің тапсырысыңыз', receiptTitle:'Даяшыға арналған чек', showToWaiter:'Даяшыға көрсету',
+    subtotal:'Барлығы', total:'Толық құны', totalItems:'Барлық позициялар', addToOrder:'Тапсырысқа қосу керек пе?',
+    showScreen:'Осы экранды даяшыға көрсетіңіз', waiterComing:'Даяшы тапсырысты растау үшін сізге келеді',
+    emptyOrder:'Тапсырысыңыз бос.', goToMenu:'Мәзірге өту', emptyOrderShort:'Тапсырыс бос.',
+    nothingFound:'Ештеңе табылмады', searchResults:'Іздеу нәтижелері',
+    addedToOrder:'Тапсырысқа қосылды', photoUpdated:'«%s» үшін фото жаңартылды', uploadPhoto:'Фото жүктеу',
+  },
+  en: {
+    welcome1:'Welcome, dear guest!', welcome2:'Signature cuisine and a burgundy wine list 🍷',
+    network:'Network', password:'Password', terrace:'Summer terrace',
+    viewMenu:'View menu', howToGet:'How to get there — 2GIS', leaveReview:'Leave a review',
+    address:'Address', hours:'Opening hours', contacts:'Contacts',
+    hoursLine1:'Sun–Thu 12:00–00:00', hoursLine2:'Fri–Sat 12:00–02:00',
+    search:'Search', yourOrder:'Your order', receiptTitle:'Receipt for the waiter', showToWaiter:'Show to waiter',
+    subtotal:'Subtotal', total:'Total', totalItems:'Total items', addToOrder:'Add to your order?',
+    showScreen:'Show this screen to the waiter', waiterComing:'A waiter will come to confirm your order',
+    emptyOrder:'Your order is empty.', goToMenu:'Go to menu', emptyOrderShort:'Order is empty.',
+    nothingFound:'Nothing found', searchResults:'Search results',
+    addedToOrder:'Added to order', photoUpdated:'Photo for "%s" updated', uploadPhoto:'Upload photo',
+  }
+};
+let currentLang = (function(){
+  try{ return localStorage.getItem('merlotLang') || 'ru'; }catch(e){ return 'ru'; }
+})();
+
+/* ---------------- DATA (мультиязычный контент) ---------------- */
+/*
+  ФОТО КАТЕГОРИЙ — задаются прямо здесь, в коде.
+  В поле img впишите ссылку на картинку (https://...) или base64-строку (data:image/jpeg;base64,...).
+  Пока img: null — вкладка показывает пустую заглушку.
+*/
 const CATS = [
-  {id:'hits', name:'Хиты продаж!', img:null},
-  {id:'summer', name:'Летнее меню', img:null},
-  {id:'main', name:'Основное меню', img:null},
-  {id:'bar', name:'Барное меню', img:null},
+  {id:'hits', name:{ru:'Хиты продаж!', kz:'Сатылым хиттері!', en:'Best sellers!'}, img:'photos/hitprodash.jpg'},
+  {id:'summer', name:{ru:'Летнее меню', kz:'Жазғы мәзір', en:'Summer menu'}, img:'photos/letmenu.jpg'},
+  {id:'main', name:{ru:'Основное меню', kz:'Негізгі мәзір', en:'Main menu'}, img:'photos/osnmenu.jpg'},
+  {id:'bar', name:{ru:'Барное меню', kz:'Бар мәзірі', en:'Bar menu'}, img:'photos/barmenu.jpg'},
 ];
 
-/* фото категорий сохраняются в браузере — при следующем открытии сайта подставятся снова */
-try{
-  const saved = JSON.parse(localStorage.getItem('merlotCatImages') || '{}');
-  CATS.forEach(c => { if(saved[c.id]) c.img = saved[c.id]; });
-}catch(e){}
+/* ---------------- PROMO BANNERS (реклама) ---------------- */
+/*
+  РЕКЛАМНЫЕ БАННЕРЫ — тоже задаются прямо здесь.
+  Впишите img: 'https://...' или base64-строку для каждого баннера.
+  Чтобы добавить ещё баннер — просто добавьте новый объект {id:'p4', img:'...'} в массив.
+  Чтобы убрать баннер — удалите соответствующую строку.
+*/
+const PROMOS = [
+  {id:'p1', img:'photos/reklama1.jpg'},
+  {id:'p2', img:'photos/reklama2.jpg'},
+  {id:'p3', img:'photos/reklama3.jpg'},
+];
 
-function saveCatImages(){
-  const map = {};
-  CATS.forEach(c => { if(c.img) map[c.id] = c.img; });
-  try{ localStorage.setItem('merlotCatImages', JSON.stringify(map)); }catch(e){}
+function renderPromos(){
+  const wrap = document.getElementById('promoScroll');
+  if(!wrap) return;
+  wrap.innerHTML = PROMOS.map(p=>{
+    const imgStyle = p.img ? `background-image:url('${p.img}')` : '';
+    return `<div class="promo-card ${p.img?'':'empty'}" style="${imgStyle}"></div>`;
+  }).join('');
 }
 
+/*
+  ФОТО БЛЮД — задаются прямо здесь, в коде.
+  В поле img впишите ссылку на фото (https://...) или base64-строку (data:image/jpeg;base64,...).
+  Пока img: null — показывается эмодзи-заглушка на цветном фоне.
+  Фото автоматически обрежется и впишется в квадратную рамку без искажений (как на референсе).
+*/
 const DISHES = [
-  {id:1, cat:'hits', img:'photos/rice.jpg', icon:'🍚', name:'Азиатский жареный рис с курицей', desc:'Обжаренный рис с нежным куриным филе, бобами эдамаме и свежими овощами, украшенный зелёным луком и микрозеленью.', price:3900, weight:'280 г', star:true},
-  {id:2, cat:'hits', img:'photos/pizza.jpg', icon:'🍕', name:'Пицца Салями', desc:'Тонкая основа из свежего теста, щедро покрытая томатным соусом и моцареллой, с пикантной салями и посыпкой из тёртого пармезана.', price:4500, weight:'420 г', star:true},
-  {id:3, cat:'hits', img:'photos/roll.jpg', icon:'🍣', name:'Запечённый ролл с угрём', desc:'Тёплый ролл с нежным угрём, запечённый под сливочно-сырной шапкой с лёгкой сладковатой ноткой соуса унаги.', price:4200, weight:'250 г', star:true},
-  {id:4, cat:'summer', img:'photos/salad.jpg', icon:'🥗', name:'Летний салат с бурратой', desc:'Спелые томаты, сливочная буррата, базилик и бальзамический крем на подушке из руколы.', price:3600, weight:'230 г'},
-  {id:5, cat:'summer', img:'photos/watermelon.jpg', icon:'🍹', name:'Арбузный спритц', desc:'Освежающий безалкогольный коктейль на основе арбузного фреша, лайма и мяты.', price:2400, weight:'350 мл'},
-  {id:6, cat:'main', img:'photos/steak.jpg', icon:'🥩', name:'Стейк Рибай Merlot', desc:'Мраморная говядина на углях, соус на основе красного вина, картофель гратен.', price:8900, weight:'320 г'},
-  {id:7, cat:'main', img:'photos/pasta.jpg', icon:'🍝', name:'Паста Трюфель', desc:'Тальятелле с кремовым соусом из белых грибов и трюфельным маслом.', price:5200, weight:'260 г'},
-  {id:8, cat:'bar', img:'photos/wine.jpg', icon:'🍷', name:'Бокал Merlot Reserve', desc:'Насыщенное красное вино с нотами тёмных ягод и специй.', price:3200, weight:'150 мл'},
-  {id:9, cat:'bar', img:'photos/negroni.jpg', icon:'🍸', name:'Negroni Bordeaux', desc:'Классический Негрони с акцентом на бордовые тона горького ликёра.', price:3800, weight:'200 мл'},
+  {id:1, cat:'hits', ph:'ph-1', icon:'🍚', img:'photos/rice.jpg', star:true, price:3900,
+    name:{ru:'Азиатский жареный рис с курицей', kz:'Тауық етімен азиялық қуырылған күріш', en:'Asian Fried Rice with Chicken'},
+    desc:{ru:'Обжаренный рис с нежным куриным филе, бобами эдамаме и свежими овощами, украшенный зелёным луком и микрозеленью.', kz:'Жұмсақ тауық филесімен, эдамаме бұршағымен және балғын көкөністермен қуырылған күріш, жасыл пиязбен әрленген.', en:'Fried rice with tender chicken fillet, edamame beans and fresh vegetables, garnished with spring onion and microgreens.'},
+    weight:{ru:'280 г', kz:'280 г', en:'280 g'}},
+  {id:2, cat:'hits', ph:'ph-2', icon:'🍕', img:'photos/pizza.jpg', star:true, price:4500,
+    name:{ru:'Пицца Салями', kz:'Салями пиццасы', en:'Salami Pizza'},
+    desc:{ru:'Тонкая основа из свежего теста, щедро покрытая томатным соусом и моцареллой, с пикантной салями и посыпкой из тёртого пармезана.', kz:'Қызанақ соусымен және моцарелламен молынан жабылған жұқа қамырлы негіз, дәмді салямимен және тертілген пармезанмен.', en:'Thin fresh dough base generously topped with tomato sauce and mozzarella, spicy salami and grated parmesan.'},
+    weight:{ru:'420 г', kz:'420 г', en:'420 g'}},
+  {id:3, cat:'hits', ph:'ph-3', icon:'🍣', img:'photos/roll.jpg', star:true, price:4200,
+    name:{ru:'Запечённый ролл с угрём', kz:'Жыланбалықпен пісірілген ролл', en:'Baked Eel Roll'},
+    desc:{ru:'Тёплый ролл с нежным угрём, запечённый под сливочно-сырной шапкой с лёгкой сладковатой ноткой соуса унаги.', kz:'Кілегей-ірімшік қабатының астында пісірілген, унаги соусының жеңіл тәтті дәмі бар жұмсақ жыланбалықты ролл.', en:'Warm roll with delicate eel, baked under a creamy cheese cap with a light sweet note of unagi sauce.'},
+    weight:{ru:'250 г', kz:'250 г', en:'250 g'}},
+  {id:4, cat:'summer', ph:'ph-4', icon:'🥗', img:'photos/salad.jpg', price:3600,
+    name:{ru:'Летний салат с бурратой', kz:'Буррата қосылған жазғы салат', en:'Summer Burrata Salad'},
+    desc:{ru:'Спелые томаты, сливочная буррата, базилик и бальзамический крем на подушке из руколы.', kz:'Пісіп жетілген қызанақ, кілегейлі буррата, райхан және руккола үстінде бальзамик крем.', en:'Ripe tomatoes, creamy burrata, basil and balsamic cream on a bed of arugula.'},
+    weight:{ru:'230 г', kz:'230 г', en:'230 g'}},
+  {id:5, cat:'summer', ph:'ph-5', icon:'🍹', img:'photos/watermelon.jpg', price:2400,
+    name:{ru:'Арбузный спритц', kz:'Қарбыз спритці', en:'Watermelon Spritz'},
+    desc:{ru:'Освежающий безалкогольный коктейль на основе арбузного фреша, лайма и мяты.', kz:'Қарбыз шырынына, лаймға және жалбызға негізделген сергітетін алкогольсіз коктейль.', en:'Refreshing non-alcoholic cocktail made with fresh watermelon juice, lime and mint.'},
+    weight:{ru:'350 мл', kz:'350 мл', en:'350 ml'}},
+  {id:6, cat:'main', ph:'ph-6', icon:'🥩', img:'photos/steak.jpg', price:8900,
+    name:{ru:'Стейк Рибай Merlot', kz:'Merlot рибай стейгі', en:'Merlot Ribeye Steak'},
+    desc:{ru:'Мраморная говядина на углях, соус на основе красного вина, картофель гратен.', kz:'Көмірде пісірілген мраморлы сиыр еті, қызыл шарап негізіндегі соус, картоп гратені.', en:'Marbled beef cooked over coals, red wine reduction sauce, potato gratin.'},
+    weight:{ru:'320 г', kz:'320 г', en:'320 g'}},
+  {id:7, cat:'main', ph:'ph-1', icon:'🍝', img:'photos/pasta.jpg', price:5200,
+    name:{ru:'Паста Трюфель', kz:'Трюфель пастасы', en:'Truffle Pasta'},
+    desc:{ru:'Тальятелле с кремовым соусом из белых грибов и трюфельным маслом.', kz:'Ақ саңырауқұлақ негізіндегі кілегей соусы мен трюфель майы қосылған тальятелле.', en:'Tagliatelle with a creamy porcini mushroom sauce and truffle oil.'},
+    weight:{ru:'260 г', kz:'260 г', en:'260 g'}},
+  {id:8, cat:'bar', ph:'ph-2', icon:'🍷', img:'photos/wine.jpg', price:3200,
+    name:{ru:'Бокал Merlot Reserve', kz:'Merlot Reserve бокалы', en:'Glass of Merlot Reserve'},
+    desc:{ru:'Насыщенное красное вино с нотами тёмных ягод и специй.', kz:'Қою жидек және дәмдеуіштер нотасы бар қанық қызыл шарап.', en:'Rich red wine with notes of dark berries and spice.'},
+    weight:{ru:'150 мл', kz:'150 мл', en:'150 ml'}},
+  {id:9, cat:'bar', ph:'ph-3', icon:'🍸', img:'photos/negroni.jpg', price:3800,
+    name:{ru:'Negroni Bordeaux', kz:'Negroni Bordeaux', en:'Negroni Bordeaux'},
+    desc:{ru:'Классический Негрони с акцентом на бордовые тона горького ликёра.', kz:'Ащы ликердің қызыл-күрең реңіне екпін жасалған классикалық Негрони.', en:'Classic Negroni with an accent on the deep burgundy tones of bitter liqueur.'},
+    weight:{ru:'200 мл', kz:'200 мл', en:'200 ml'}},
 ];
 
+/* ФОТО ДОПОЛНИТЕЛЬНЫХ ПОЗИЦИЙ — по той же схеме, поле img */
 const ADDONS = [
-  {id:101, img:'photos/bread.jpg', icon:'🍞', name:'Хлебная корзина', price:1200},
-  {id:102, img:'photos/morse.jpg', icon:'🥤', name:'Морс домашний', price:1500},
-  {id:103, img:'photos/creme-brulee.jpg', icon:'🍮', name:'Крем-брюле', price:2200},
+  {id:101, ph:'ph-4', icon:'🍞', img:'photos/bread.jpg', price:1200, name:{ru:'Хлебная корзина', kz:'Нан себеті', en:'Bread basket'}},
+  {id:102, ph:'ph-5', icon:'🥤', img:'photos/morse.jpg', price:1500, name:{ru:'Морс домашний', kz:'Үй жасаған морс', en:'Homemade fruit drink'}},
+  {id:103, ph:'ph-6', icon:'🍮', img:'photos/creme-brulee.jpg', price:2200, name:{ru:'Крем-брюле', kz:'Крем-брюле', en:'Crème brûlée'}},
 ];
 
 /* ---------------- STATE ---------------- */
 let cart = {}; // id -> qty
 let activeCat = 'hits';
+
+/* ---------------- LANGUAGE SWITCH ---------------- */
+function toggleLangMenu(e){
+  e.stopPropagation();
+  document.getElementById('langMenu').classList.toggle('show');
+}
+document.addEventListener('click', function(e){
+  const menu = document.getElementById('langMenu');
+  if(menu && !document.getElementById('langPill').contains(e.target)){
+    menu.classList.remove('show');
+  }
+});
+
+function applyLanguage(lang){
+  currentLang = lang;
+  try{ localStorage.setItem('merlotLang', lang); }catch(e){}
+  document.documentElement.lang = (lang==='kz' ? 'kk' : lang);
+  const t = T[lang];
+
+  document.getElementById('langCode').textContent = lang.toUpperCase();
+  document.querySelectorAll('#langMenu button').forEach(b=>{
+    b.classList.toggle('active', b.getAttribute('data-lang')===lang);
+  });
+
+  document.getElementById('descBlock').innerHTML =
+    t.welcome1 + '<br>' + t.welcome2 +
+    `<span class="wifi-block">
+      <b>Wi-Fi</b><br>
+      ${t.network}: Merlot_Guest<br>
+      ${t.password}: MerlotVIP<br>
+      <b>${t.terrace}</b><br>
+      ${t.network}: Merlot_Leto<br>
+      ${t.password}: Leto12345
+    </span>`;
+
+  document.getElementById('menuCtaLabel').textContent = t.viewMenu;
+  document.getElementById('gisLabel').textContent = t.howToGet;
+  document.getElementById('reviewLabel').textContent = t.leaveReview;
+  document.getElementById('addressTitle').textContent = t.address;
+  document.getElementById('hoursTitle').textContent = t.hours;
+  document.getElementById('hoursSub').innerHTML = t.hoursLine1 + '<br>' + t.hoursLine2;
+  document.getElementById('contactsTitle').textContent = t.contacts;
+  document.getElementById('searchInput').placeholder = t.search;
+  document.getElementById('orderTitle').textContent = t.yourOrder;
+  document.getElementById('receiptTitle').textContent = t.receiptTitle;
+  document.getElementById('cartLabelText').textContent = t.yourOrder;
+  document.getElementById('waiterBtnText').textContent = t.showToWaiter;
+
+  renderCats();
+  renderMenu();
+  if(document.getElementById('view-order').classList.contains('active')) renderOrder();
+  if(document.getElementById('view-receipt').classList.contains('active')) renderReceipt();
+  updateCartBar();
+
+  document.getElementById('langMenu').classList.remove('show');
+}
 
 /* ---------------- NAV ---------------- */
 function goTo(view){
@@ -607,18 +778,19 @@ function showReceipt(){
 }
 
 function renderReceipt(){
+  const t = T[currentLang];
   const body = document.getElementById('receiptBody');
   const entries = allEntries();
   if(entries.length===0){
-    body.innerHTML = `<div style="padding:40px 4px;text-align:center;color:var(--text-faint);font-size:14px;">Заказ пуст.</div>`;
+    body.innerHTML = `<div style="padding:40px 4px;text-align:center;color:var(--text-faint);font-size:14px;">${t.emptyOrderShort}</div>`;
     return;
   }
   const total = cartTotalAmount();
   const rows = entries.map(e=>`
     <div class="receipt-row">
       <div>
-        <div class="rname">${e.item.name} ${e.qty>1?`× ${e.qty}`:''}</div>
-        ${e.item.weight ? `<div class="rmeta">${e.item.weight}</div>` : ''}
+        <div class="rname">${e.item.name[currentLang]} ${e.qty>1?`× ${e.qty}`:''}</div>
+        ${e.item.weight ? `<div class="rmeta">${e.item.weight[currentLang]}</div>` : ''}
       </div>
       <div class="rprice">${(e.item.price*e.qty).toLocaleString('ru-RU')} ₸</div>
     </div>`).join('');
@@ -626,16 +798,16 @@ function renderReceipt(){
   body.innerHTML = `
     <div class="receipt-flag">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2z" stroke="#fff" stroke-width="1.8"/><path d="M12 7v5l3.5 2" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg>
-      Покажите этот экран официанту
+      ${t.showScreen}
     </div>
     <div class="receipt-card">
       ${rows}
       <div class="receipt-summary">
-        <div class="total-row"><span>Итого позиций</span><span>${cartTotalCount()}</span></div>
-        <div class="total-row main"><span>Полная стоимость</span><span>${total.toLocaleString('ru-RU')} ₸</span></div>
+        <div class="total-row"><span>${t.totalItems}</span><span>${cartTotalCount()}</span></div>
+        <div class="total-row main"><span>${t.total}</span><span>${total.toLocaleString('ru-RU')} ₸</span></div>
       </div>
     </div>
-    <div class="receipt-note">Официант подойдёт к вам для подтверждения заказа</div>
+    <div class="receipt-note">${t.waiterComing}</div>
   `;
 }
 
@@ -646,53 +818,33 @@ function renderCats(){
     const imgStyle = c.img ? `background-image:url('${c.img}')` : '';
     return `
     <div class="cat-card ${c.id===activeCat?'active':''}" onclick="setCat('${c.id}')">
-      <div class="cat-card-img ${c.img?'':'empty'}" style="${imgStyle}">
-        <button class="cat-edit-btn" onclick="event.stopPropagation();document.getElementById('catFile-${c.id}').click();" title="Загрузить фото">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M4 7h3l2-2h6l2 2h3v13H4V7z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="12" cy="13" r="3.2" stroke="currentColor" stroke-width="1.8"/></svg>
-        </button>
-        <input type="file" accept="image/*" id="catFile-${c.id}" onchange="onCatImageSelect(event,'${c.id}')">
-      </div>
-      <div class="cat-card-label">${c.name}</div>
+      <div class="cat-card-img ${c.img?'':'empty'}" style="${imgStyle}"></div>
+      <div class="cat-card-label">${c.name[currentLang]}</div>
     </div>`;
   }).join('');
-}
-function onCatImageSelect(e, catId){
-  const file = e.target.files[0];
-  if(!file) return;
-  const reader = new FileReader();
-  reader.onload = function(ev){
-    const cat = CATS.find(c=>c.id===catId);
-    if(cat){
-      cat.img = ev.target.result;
-      saveCatImages();
-      renderCats();
-      showToast('Фото для «'+cat.name+'» обновлено');
-    }
-  };
-  reader.readAsDataURL(file);
 }
 function setCat(id){ activeCat = id; renderCats(); renderMenu(); }
 
 function renderMenu(){
   renderCats();
+  renderPromos();
+  const t = T[currentLang];
   const q = document.getElementById('searchInput').value.trim().toLowerCase();
-  let list = DISHES.filter(d => q ? d.name.toLowerCase().includes(q) : d.cat===activeCat);
-  const label = q ? `Результаты поиска` : (CATS.find(c=>c.id===activeCat)||{}).name;
+  let list = DISHES.filter(d => q ? d.name[currentLang].toLowerCase().includes(q) : d.cat===activeCat);
+  const label = q ? t.searchResults : (CATS.find(c=>c.id===activeCat)||{}).name[currentLang];
   const body = document.getElementById('menuBody');
   if(list.length===0){
-    body.innerHTML = `<div class="section-label">${label}</div><div style="color:var(--text-faint);font-size:13.5px;padding:20px 2px;">Ничего не найдено</div>`;
+    body.innerHTML = `<div class="section-label">${label}</div><div style="color:var(--text-faint);font-size:13.5px;padding:20px 2px;">${t.nothingFound}</div>`;
     return;
   }
   body.innerHTML = `<div class="section-label">${label}</div>` + list.map(d=>{
     const qty = cart[d.id]||0;
     return `
     <div class="dish-card">
-      <div class="dish-img" style="background-image:url('${d.img}')">
-  ${d.star?'<span class="star">★</span>':''}
-</div>
+      <div class="dish-img ${d.img?'has-img':d.ph}" style="${d.img?`background-image:url('${d.img}')`:''}">${d.img?'':d.icon}${d.star?'<span class="star">★</span>':''}</div>
       <div class="dish-info">
-        <div class="dish-name">${d.name}</div>
-        <div class="dish-desc">${d.desc}</div>
+        <div class="dish-name">${d.name[currentLang]}</div>
+        <div class="dish-desc">${d.desc[currentLang]}</div>
         <div class="dish-bottom">
           <span class="dish-price">${d.price.toLocaleString('ru-RU')} ₸</span>
           <button class="add-btn ${qty>0?'filled':''}" onclick="addToCart(${d.id})">${qty>0?qty:'+'}</button>
@@ -719,7 +871,7 @@ function addonAdd(id){
   cart['a'+id] = (cart['a'+id]||0) + 1;
   renderOrder();
   updateCartBar();
-  showToast('Добавлено к заказу');
+  showToast(T[currentLang].addedToOrder);
 }
 
 function allEntries(){
@@ -754,21 +906,21 @@ function updateCartBar(){
 }
 
 function renderOrder(){
+  const t = T[currentLang];
   const body = document.getElementById('orderBody');
   const entries = allEntries();
   if(entries.length===0){
-    body.innerHTML = `<div style="padding:40px 4px;text-align:center;color:var(--text-faint);font-size:14px;">Ваш заказ пуст.<br><br><button class="cta-primary" style="justify-content:center" onclick="goTo('menu')"><span class="label">Перейти в меню</span></button></div>`;
+    body.innerHTML = `<div style="padding:40px 4px;text-align:center;color:var(--text-faint);font-size:14px;">${t.emptyOrder}<br><br><button class="cta-primary" style="justify-content:center" onclick="goTo('menu')"><span class="label">${t.goToMenu}</span></button></div>`;
     return;
   }
   const itemsHtml = entries.map(e=>{
     const isAddon = String(e.key).startsWith('a');
     return `
     <div class="order-item">
-      <div class="order-item-img" style="background-image:url('${e.item.img}')">
-</div>
+      <div class="order-item-img ${e.item.img?'has-img':e.item.ph}" style="${e.item.img?`background-image:url('${e.item.img}')`:''}">${e.item.img?'':e.item.icon}</div>
       <div class="order-item-info">
-        <div class="order-item-name">${e.item.name}</div>
-        ${e.item.weight ? `<div class="order-item-meta">${e.item.weight}</div>` : ''}
+        <div class="order-item-name">${e.item.name[currentLang]}</div>
+        ${e.item.weight ? `<div class="order-item-meta">${e.item.weight[currentLang]}</div>` : ''}
         <div class="qty-row">
           <button class="qty-btn" onclick="${isAddon?`addonQty('${e.key}',-1)`:`changeQty(${e.item.id},-1)`}">−</button>
           <span class="qty-val">${e.qty}</span>
@@ -782,10 +934,9 @@ function renderOrder(){
   const total = cartTotalAmount();
   const addonHtml = ADDONS.map(a=>`
     <div class="addon-card">
-     <div class="addon-img" style="background-image:url('${a.img}')">
-</div>
+      <div class="addon-img ${a.img?'has-img':a.ph}" style="${a.img?`background-image:url('${a.img}')`:''}">${a.img?'':a.icon}</div>
       <div class="addon-info">
-        <div class="addon-name">${a.name}</div>
+        <div class="addon-name">${a.name[currentLang]}</div>
         <div class="addon-bottom">
           <span class="addon-price">${a.price.toLocaleString('ru-RU')} ₸</span>
           <button class="addon-add" onclick="addonAdd(${a.id})">+</button>
@@ -796,10 +947,10 @@ function renderOrder(){
   body.innerHTML = `
     ${itemsHtml}
     <div class="totals">
-      <div class="total-row"><span>Итого</span><span>${total.toLocaleString('ru-RU')} ₸</span></div>
-      <div class="total-row main"><span>Полная стоимость</span><span>${total.toLocaleString('ru-RU')} ₸</span></div>
+      <div class="total-row"><span>${t.subtotal}</span><span>${total.toLocaleString('ru-RU')} ₸</span></div>
+      <div class="total-row main"><span>${t.total}</span><span>${total.toLocaleString('ru-RU')} ₸</span></div>
     </div>
-    <div class="addon-label">Добавить к заказу?</div>
+    <div class="addon-label">${t.addToOrder}</div>
     <div class="addon-scroll">${addonHtml}</div>
   `;
 }
@@ -822,8 +973,7 @@ function showToast(msg){
 }
 
 /* ---------------- INIT ---------------- */
-renderCats();
-renderMenu();
+applyLanguage(currentLang);
 </script>
 </body>
 </html>
